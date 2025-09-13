@@ -15,7 +15,7 @@
 
     /* 2) BUILD & RUN — on Windows Agent (label: win) */
     stage('Build on Windows Agent') {
-      agent { label 'win' }
+      agent { label 'windows' }
       steps {
         bat """
         if exist out rmdir /s /q out
