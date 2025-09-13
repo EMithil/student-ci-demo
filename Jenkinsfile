@@ -37,7 +37,7 @@
           }
         }
         stage('Agent lane') {
-          agent { label 'win' }
+          agent { label 'windows' }
           steps {
             bat "echo PARALLEL NODE = %NODE_NAME%"
           }
