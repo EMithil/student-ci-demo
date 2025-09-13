@@ -1,4 +1,4 @@
- pipeline {
+pipeline {
   agent none
   options { timestamps(); timeout(time: 15, unit: 'MINUTES') }
 
@@ -13,17 +13,22 @@
       }
     }
 
-    /* 2) BUILD & RUN — on Windows Agent (label: win) */
+    /* 2) BUILD & RUN — on Windows Agent */
     stage('Build on Windows Agent') {
       agent { label 'windows' }
       steps {
         bat """
-        if exist out rmdir /s /q out
-        mkdir out
-        javac -d out src\\hello\\Hello.java
-        java -cp out hello.Hello
-        echo Build_OK > artifact.txt
+          if exist out rmdir /s /q out
+          mkdir out
+          javac -d out src\\hello\\Hello.java
+          java -cp out hello.Hello
+          echo Build_OK > artifact.txt
         """
+      }
+      post {
+        always {
+          archiveArtifacts artifacts: 'artifact.txt, out/**', allowEmptyArchive: false
+        }
       }
     }
 
@@ -43,12 +48,6 @@
           }
         }
       }
-    }
-  }
-
-  post {
-    always {
-      archiveArtifacts artifacts: 'artifact.txt, out/**', allowEmptyArchive: false
     }
   }
 }
